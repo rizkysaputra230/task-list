@@ -1,45 +1,46 @@
 import React from 'react';
 import TimeCardHeader from "./TimeCardHeader";
 
-export const TimeCard = () => {
-  const schedules =
-    [
-      {
-        jadwal: 'Subuh',
-        time: '04.30'
-      },
-      {
-        jadwal: 'Dzuhur',
-        time: '12.10'
-      },
-      {
-        jadwal: 'Ashar',
-        time: '15.30'
-      },
-      {
-        jadwal: 'Maghrib',
-        time: '18.10'
-      },
-      {
-        jadwal: 'Isya',
-        time: '19.15'
-      }
-    ]
+export const TimeCard = (props = {}) => {
+  const {
+    time,
+    data
+  } = props
   return (
     <>
-      <TimeCardHeader />
+      <TimeCardHeader
+        time={time}
+        dateTime={data.tanggal}
+      />
       <div className="flex flex-col rounded-b-xl">
         <table>
           <tbody>
             <tr>
-              {schedules.map((row, index) => (
-                <td
-                  key={index}
-                  className="flex justify-between px-3 py-2 odd:bg-primary/20 even:bg-accent1/30 text-base font-medium last:rounded-b-xl">
-                  <span>{row.jadwal}</span>
-                  <span>{row.time}</span>
-                </td>
-              ))}
+              <td
+                className="flex justify-between px-3 py-2 odd:bg-primary/20 even:bg-accent1/30 text-base font-medium last:rounded-b-xl">
+                <span>Subuh</span>
+                <span>{data.subuh}</span>
+              </td>
+              <td
+                className="flex justify-between px-3 py-2 odd:bg-primary/20 even:bg-accent1/30 text-base font-medium last:rounded-b-xl">
+                <span>Dzuhur</span>
+                <span>{data.dzuhur}</span>
+              </td>
+              <td
+                className="flex justify-between px-3 py-2 odd:bg-primary/20 even:bg-accent1/30 text-base font-medium last:rounded-b-xl">
+                <span>Ashar</span>
+                <span>{data.ashar}</span>
+              </td>
+              <td
+                className="flex justify-between px-3 py-2 odd:bg-primary/20 even:bg-accent1/30 text-base font-medium last:rounded-b-xl">
+                <span>Maghrib</span>
+                <span>{data.maghrib}</span>
+              </td>
+              <td
+                className="flex justify-between px-3 py-2 odd:bg-primary/20 even:bg-accent1/30 text-base font-medium last:rounded-b-xl">
+                <span>Isya</span>
+                <span>{data.isya}</span>
+              </td>
             </tr>
           </tbody>
         </table>

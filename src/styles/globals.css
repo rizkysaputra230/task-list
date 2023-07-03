@@ -1,4 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue&family=Inter:wght@500&family=Nunito:wght@500&family=Roboto&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+body {
+    font-family: 'Inter', sons-serif;
+}

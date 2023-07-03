@@ -7,16 +7,20 @@ export const InputUpload = (props = {}) => {
     htmlFor,
     label,
     placeholder,
-    togglePassword,
+    accept = '',
+    onChange,
     registerUseForm,
-    rules = {},
-    ...rest
+    rules = []
   } = props
 
   const [uploadValue, setUploadValue] = useState()
-  const inputFileRef = useRef(null)
+  const inputFileRef = useRef()
 
   const onFileChange = (e) => {
+    if (onChange) {
+      onChange(e)
+    }
+
     if (e.target.files.length > 0) {
       const { target } = e
       const files = target.files[0]
@@ -50,13 +54,13 @@ export const InputUpload = (props = {}) => {
               name={fieldName}
               className="hidden"
               type="file"
+              accept={accept}
+              onChange={onFileChange}
               {...(registerUseForm
                 ? {
                   ...registerUseForm(fieldName, rules),
                 }
                 : {})}
-              {...rest}
-              onChange={onFileChange}
             />
             <button
               className="md:w-1/5 w-1/4 border-2 rounded-xl px-4 py-3 bg-primary text-white text-center"

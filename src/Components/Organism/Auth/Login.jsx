@@ -1,16 +1,41 @@
 import { Layout } from '@/Components/Molecules/Layouts/Layout';
+import axios from 'axios';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { formOptions } from '../../../Utils/Validation';
 import ButtonPrimary from '../../Atoms/Button/ButtonPrimary';
 import InputText from '../../Atoms/Input/InputText';
 
 export const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm(formOptions)
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    setIsLoading(true)
+    const response = await axios
+      .post('http://localhost:8000/api/login', data)
+      .then(res => {
+        if (res && res.data.status) {
+          localStorage.setItem('token', res.data.token)
+          localStorage.setItem('user', res.data.user)
+          toast.success('Login successful')
+          setTimeout(() => {
+            router.push('/dashboard')
+          }, 500)
+        } else {
+          toast.error('Account not found, try again')
+        }
+      })
+      .catch(error => {
+        console.log('An error occurred:', error.response);
+        toast.error('Account not found, try again')
+      })
 
+    setIsLoading(false)
   }
 
   return (
@@ -81,6 +106,7 @@ export const Login = () => {
                     <ButtonPrimary
                       label={'Sign In'}
                       type={'submit'}
+                      loading={isLoading}
                     />
                     <div className="text-center pt-3">
                       <span className="text-sm font-normal">Dont Have Account? <Link href="/register" className="cursor-pointer text-primary">Sign Up</Link></span>

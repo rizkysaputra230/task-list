@@ -1,16 +1,64 @@
 import InputUpload from '@/Components/Atoms/Input/InputUpload';
 import { Layout } from '@/Components/Molecules/Layouts/Layout';
+import { PostAPIFile } from '@/Helpers/Api';
+import { formOptions } from '@/Utils/Validation';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import ButtonPrimary from '../../Atoms/Button/ButtonPrimary';
 import InputText from '../../Atoms/Input/InputText';
 
 export const Register = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm()
+  const { register, setError, setValue, handleSubmit, formState: { errors } } = useForm({
+    ...formOptions, defaultValues: {
+      phone: ''
+    }
+  })
+  const [isLoading, setIsLoading] = useState(null)
+  const router = useRouter()
 
-  const onSubmit = (data) => {
+  const handlePhone = (e) => {
+    const value = e.target.value.replace(/\D/g, "");
+    setValue('phone', value);
+  }
 
+  const onSubmit = async (data) => {
+    setIsLoading(true)
+
+    let payload = new FormData()
+    payload.append('name', data.name)
+    payload.append('email', data.email)
+    payload.append('phone', data.phone)
+    payload.append('password', data.password)
+    payload.append('repeat_password', data.repeat_password)
+    payload.append('upload_photo', data.upload_photo)
+    payload.append('upload_cv', data.upload_cv)
+
+    const response = await PostAPIFile({
+      url: 'http://localhost:8000/api/register',
+      payload: payload,
+      header: {
+        'Content-Type': 'multipart/form-data'
+      },
+      message: {
+        success: 'Register successful',
+      },
+      setError: setError,
+    })
+
+    const { errors } = response
+    if (!errors) {
+      localStorage.setItem('token', response.token)
+      localStorage.setItem('user', response.user)
+      router.push('/dashboard')
+    }
+    if (errors) {
+      toast.error('Register unsuccessful')
+    }
+
+    setIsLoading(false)
   }
 
   return (
@@ -73,17 +121,18 @@ export const Register = () => {
                     placeholder={'+628xx-xxxx-xxxx'}
                     type={'text'}
                     registerUseForm={register}
+                    onInput={handlePhone}
                     rules={
                       {
                         required: {
                           value: true,
-                          message: "Email is required"
-                        }
+                          message: "Phone is required"
+                        },
                       }
                     }
                   />
 
-                  {errors.email && <p className="text-danger text-sm font-semibold">{errors.email.message}</p>}
+                  {errors.phone && <p className="text-danger text-sm font-semibold">{errors.phone.message}</p>}
 
                   <InputText
                     htmlFor={'password'}
@@ -107,7 +156,7 @@ export const Register = () => {
 
                   <InputText
                     htmlFor={'repeat-password'}
-                    fieldName={'repeat-password'}
+                    fieldName={'repeat_password'}
                     label={'Repeat Password'}
                     placeholder={'Input your password'}
                     type={'password'}
@@ -123,24 +172,37 @@ export const Register = () => {
                     }
                   />
 
-                  {errors.password && <p className="text-danger text-sm font-semibold">{errors.password.message}</p>}
+                  {errors.repeat_password && <p className="text-danger text-sm font-semibold">{errors.repeat_password.message}</p>}
 
                   <InputUpload
                     htmlFor={'image'}
+                    fieldName={'upload_photo'}
                     label={'Image Upload'}
                     placeholder={'Upload your image'}
+                    accept={"image/png,image/gif,image/jpeg"}
+                    onChange={(e) => {
+                      const photo = e.target.files[0]
+                      setValue('upload_photo', photo)
+                    }}
                   />
 
                   <InputUpload
                     htmlFor={'cv'}
+                    fieldName={'upload_cv'}
                     label={'CV Upload'}
                     placeholder={'Upload your cv'}
+                    accept={"application/pdf,application/msword"}
+                    onChange={(e) => {
+                      const cv = e.target.files[0]
+                      setValue('upload_cv', cv)
+                    }}
                   />
 
                   <div className="pt-8">
                     <ButtonPrimary
                       label={'Sign In'}
                       type={'submit'}
+                      loading={isLoading}
                     />
                     <div className="text-center pt-3">
                       <span className="text-sm font-normal">Already have an account? <Link href="/login" className="cursor-pointer text-primary">Sign In</Link></span>

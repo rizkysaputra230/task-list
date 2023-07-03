@@ -45,7 +45,11 @@ export const CardCollapse = (props = {}) => {
                   <div className="flex justify-between items-center">
                     {children}
                     {buttonAction ? (
-                      <OutsideWrapperElement>
+                      <OutsideWrapperElement
+                        onClickOutside={(e) => {
+                          alert('test')
+                        }}
+                      >
                         <button type="button" onClick={toggleShowAction}>
                           <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g>
@@ -61,7 +65,7 @@ export const CardCollapse = (props = {}) => {
                       </OutsideWrapperElement>
                     ) : null}
                     {renderAction && showAction && (
-                      <div className="absolute -top-3 -right-[80px] bg-white border rounded-lg p-3">
+                      <div className="absolute top-6 -right-10 bg-white border rounded-lg p-3 w-[120px]">
                         {renderAction}
                       </div>
                     )}
