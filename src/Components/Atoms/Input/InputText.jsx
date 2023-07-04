@@ -11,6 +11,7 @@ export const InputText = (props = {}) => {
     placeholder,
     togglePassword,
     registerUseForm,
+    className,
     rules = {},
     ...rest
   } = props
@@ -33,10 +34,11 @@ export const InputText = (props = {}) => {
             <input
               id={fieldName}
               name={fieldName}
-              className="w-full rounded-xl px-4 py-3 shadow-sm bg-transparent border-2 ring-0 outline-none focus:ring-0 border-[#D8D8D8] placeholder:!text-[#90909090]"
+              className={`w-full rounded-xl px-4 py-3 shadow-sm bg-transparent border-2 ring-0 outline-none focus:ring-0 border-[#D8D8D8] placeholder:!text-[#90909090] ${className ? className : ''}`}
               type={type === 'password' ? (isPasswordVisible ? 'text' : 'password') : type}
               placeholder={placeholder}
               disabled={isDisabled}
+              autoComplete='off'
               {...(registerUseForm
                 ? {
                   ...registerUseForm(fieldName, rules),

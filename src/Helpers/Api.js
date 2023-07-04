@@ -20,8 +20,7 @@ export const PostAPIFile = async (props = {}) => {
         errors: (err.response && err.response && err.response) || {},
       };
     });
-
-  if (response && response.status) {
+  if (response.data && response.data.status) {
     toast.success(message.success || '');
   } else {
     const errors = response.errors || {};
@@ -36,8 +35,6 @@ export const PostAPIFile = async (props = {}) => {
       });
     }
     console.log({ response });
-
-    toast.error(response.errors || response.message || '');
   }
 
   return response;

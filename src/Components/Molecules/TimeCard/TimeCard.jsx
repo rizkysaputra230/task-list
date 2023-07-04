@@ -10,7 +10,7 @@ export const TimeCard = (props = {}) => {
     <>
       <TimeCardHeader
         time={time}
-        dateTime={data.tanggal}
+        dateTime={data.date_formatted}
       />
       <div className="flex flex-col rounded-b-xl">
         <table>

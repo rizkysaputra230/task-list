@@ -2,7 +2,7 @@ import React from "react";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 
 export const CardCollapseHeader = (props = {}) => {
-  const { className = '', title, isCollapse, onClick } = props
+  const { className = '', title, isCollapse, onClick, count = 0 } = props
   return (
     <button
       type={"button"}
@@ -11,7 +11,7 @@ export const CardCollapseHeader = (props = {}) => {
     >
       <div className="flex flex-row">
         <h3 className="text-medium font-semibold">{title}</h3>
-        <span className="pl-4">4 Task</span>
+        <span className="pl-4">{count} Task</span>
       </div>
       <div className="text-xl font-semibold">
         {isCollapse ? <BiSolidDownArrow /> : <BiSolidUpArrow />}

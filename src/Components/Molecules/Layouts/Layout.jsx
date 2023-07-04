@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
-export const Layout = ({ children, useHeader, user = null }) => {
+export const Layout = ({ children, useHeader, user = null, photo = null }) => {
   const [isLogout, setIsLogout] = useState(null)
   const router = useRouter()
 
@@ -21,6 +21,7 @@ export const Layout = ({ children, useHeader, user = null }) => {
     }).then(res => {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
+      localStorage.removeItem('photo')
       router.push('/')
     })
   }
@@ -51,7 +52,7 @@ export const Layout = ({ children, useHeader, user = null }) => {
                 </span>
                 <img
                   className="rounded-full w-12 h-12 border-1 border-gray-200"
-                  src="https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png" alt="" />
+                  src={photo} alt="" />
                 <button
                   className="w-full border-2 rounded-xl px-8 py-3 bg-dangers text-white text-center bg-logout"
                   type="button"

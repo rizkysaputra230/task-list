@@ -23,6 +23,7 @@ export const InputDate = (props = {}) => {
         : {})}
 
       onChange={onChange}
+      {...props}
     />
   )
 }

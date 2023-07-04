@@ -11,7 +11,7 @@ import ButtonPrimary from '../../Atoms/Button/ButtonPrimary';
 import InputText from '../../Atoms/Input/InputText';
 
 export const Register = () => {
-  const { register, setError, setValue, handleSubmit, formState: { errors } } = useForm({
+  const { register, setError, setValue, getValues, watch, handleSubmit, formState: { errors, isValid } } = useForm({
     ...formOptions, defaultValues: {
       phone: ''
     }
@@ -37,7 +37,7 @@ export const Register = () => {
     payload.append('upload_cv', data.upload_cv)
 
     const response = await PostAPIFile({
-      url: 'http://localhost:8000/api/register',
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/register`,
       payload: payload,
       header: {
         'Content-Type': 'multipart/form-data'
@@ -52,6 +52,7 @@ export const Register = () => {
     if (!errors) {
       localStorage.setItem('token', response.token)
       localStorage.setItem('user', response.user)
+      localStorage.setItem('photo', res.data.photo)
       router.push('/dashboard')
     }
     if (errors) {
@@ -174,6 +175,11 @@ export const Register = () => {
 
                   {errors.repeat_password && <p className="text-danger text-sm font-semibold">{errors.repeat_password.message}</p>}
 
+                  {watch("repeat_password") !== watch("password") &&
+                    getValues("repeat_password") ? (
+                    <p className="text-danger text-sm font-semibold">Password not match</p>
+                  ) : null}
+
                   <InputUpload
                     htmlFor={'image'}
                     fieldName={'upload_photo'}
@@ -203,6 +209,7 @@ export const Register = () => {
                       label={'Sign In'}
                       type={'submit'}
                       loading={isLoading}
+                      isDisabled={!isValid}
                     />
                     <div className="text-center pt-3">
                       <span className="text-sm font-normal">Already have an account? <Link href="/login" className="cursor-pointer text-primary">Sign In</Link></span>

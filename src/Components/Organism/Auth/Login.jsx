@@ -17,11 +17,12 @@ export const Login = () => {
   const onSubmit = async (data) => {
     setIsLoading(true)
     const response = await axios
-      .post('http://localhost:8000/api/login', data)
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, data)
       .then(res => {
         if (res && res.data.status) {
           localStorage.setItem('token', res.data.token)
           localStorage.setItem('user', res.data.user)
+          localStorage.setItem('photo', res.data.photo)
           toast.success('Login successful')
           setTimeout(() => {
             router.push('/dashboard')
