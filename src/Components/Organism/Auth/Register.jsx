@@ -52,7 +52,7 @@ export const Register = () => {
     if (!errors) {
       localStorage.setItem('token', response.token)
       localStorage.setItem('user', response.user)
-      localStorage.setItem('photo', res.data.photo)
+      localStorage.setItem('photo', response.data.photo)
       router.push('/dashboard')
     }
     if (errors) {
