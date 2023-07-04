@@ -176,7 +176,7 @@ export const Dashboard = () => {
         });
     }
     getChart()
-  }, [filterChartType])
+  }, [filterChartType, timestamp])
 
   const toggleFilterCard = useCallback((card) => {
     const findIndex = selectedCards.findIndex(value => value === card)
